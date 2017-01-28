@@ -1,0 +1,30 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "engine" : {
+    "node" : "6.9.4"
+  },
+  "description": "a simple discord bot I made for a friends server",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "discord.js" : "11.0.0", 
+    "moment-timezone" : "0.5.11", 
+    "ddg" : "0.0.3",
+    "youtube-node" : "1.3.0"
+  },
+  
+  "repository": {
+    "type": "git",
+    "url": "git+https://matthew-griffith@bitbucket.org/matthew-griffith/discord-bot.git"
+  },
+  "keywords": [
+    "bot",
+    "discord"
+  ],
+  "author": "Matthew Griffith",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/matthew-griffith/discord-bot#readme"
+}
