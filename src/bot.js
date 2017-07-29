@@ -6,6 +6,7 @@ const ddg = require("ddg");
 const YouTube = require('youtube-node');
 
 const groups = JSON.parse(fs.readFileSync("groups.json", "utf8"));
+const groupCommand = require('./group.js');
 const config = require("../config/config.json");
 
 const youtube = new YouTube();
@@ -162,143 +163,27 @@ bot.on("message", (message) => {
       msg = message.content.toLowerCase();
       msg = msg.slice(message.content.indexOf("!group"), message.content.length);
       msg = msg.split(" ");
+      filename = './groups.json' ;
       command = msg[1];
       groupName = msg[2];
       authorID = message.author.id.toString();
       username = message.author.username;
 
-      function userInGroup(arr, usr) {
-          for (i =0; i < arr.length; i++){
-            if (arr[i] === username){
-              return true;
-            }
-            else {return false;}
-          }
-        }
+      const commandObj = {
+        "new" : groupCommand.newEntry(groupName, groups, filename),
+        "add" : groupCommand.addMember(groupName, username, authorID, groups, filename),
+        "remove" : groupCommand.removeMember(groupName, username, authorID, groups, filename), 
+        "ping" : groupCommand.ping(groupName, groups), 
+        "list" : groupCommand.listMembers(groupName, groups), 
+        "help" : groupCommand.groupHelp()
+      };
 
-      // this is the command for creating a new group, it appears to be working as intented. 
-      if (command === "new") {
-        if (groupName in groups) {
-          message.channel.sendMessage("This group already exists, Baka!!!");
-        }
-        else {
-          groups[groupName] = {userIDs : [], usernames : []};
-          message.channel.sendMessage(groupName + " was created");
-          fs.writeFileSync('groups.json', JSON.stringify(groups), 'utf-8');
-        }
+      if (commandObj[command]) {
+        message.channel.sendMessage(commandObj[command]);
       }
 
-      /* this is the add command for adding a user to a group
-        TODO: test.... 
-      */
-      else if (command === "add") {
-
-        if (groupName in groups) {
-          var currentGroup = groups[groupName];
-          var groupUsernames = currentGroup["usernames"];
-          var groupIDs = currentGroup["userIDs"];
-          if (userInGroup(groupUsernames, username)) {
-            message.channel.sendMessage("you are already in this group");
-          }
-          else {
-            groupUsernames.push(username);
-            groupIDs.push(authorID);
-            currentGroup["userIDs"] = groupIDs;
-            currentGroup["usernames"] = groupUsernames;
-            groups[groupName] = currentGroup;            
-            fs.writeFileSync('groups.json', JSON.stringify(groups), 'utf-8');  
-            message.channel.sendMessage("you were added to " + groupName);                      
-          }
-        }
-        else {
-          message.channel.sendMessage("this group doesn't exist yet, maybe you should start it");
-        }
-      }
-
-        /*
-          this is the remove command for groups
-          todo:
-        */
-        else if (command === "remove") {
-
-          if (groupName in groups) {
-            var currentGroup = groups[groupName];
-            var groupUsernames = currentGroup["usernames"];
-            var groupIDs = currentGroup["userIDs"];  
-
-            if (groupUsernames.indexOf(username) > -1) {
-              groupUsernames.splice(groupUsernames.indexOf(username), 1);
-              groupIDs.splice(groupIDs.indexOf(authorID), 1);
-              currentGroup["userIDs"] = groupIDs;
-              currentGroup["usernames"] = groupUsernames;
-              groups[groupName] = currentGroup;            
-              fs.writeFileSync('groups.json', JSON.stringify(groups), 'utf-8'); 
-              message.channel.sendMessage("you were removed from " + groupName);          
-            }
-
-            else {
-              message.channel.sendMessage("you are not in this group");
-            }
-          }
-
-          else {
-            message.channel.sendMessage("check the spelling on the group name, because that group doesn't exist.");            
-          }
-        }
-
-      /*
-      below is the logic for the ping command
-      todo: everything
-      */
-      else if (command === "ping"){
-        if (groupName in groups) {
-          var currentGroup = groups[groupName];          
-          var groupIDs = currentGroup["userIDs"];
-          var pingMsg = "Yo: ";
-          for (i = 0; i < groupIDs.length; i++) {
-            pingMsg += "<@" + groupIDs[i] + "> ";
-          }
-          message.channel.sendMessage(pingMsg);
-        }
-        else {
-          message.channel.sendMessage("this group doesn't exist, maybe there was a typo.");
-        }
-      }
-
-      /*
-      below is the logic for the help command
-      todo: everything
-      */
-      else if (command === "help"){
-        message.channel.sendMessage("the group commands are a set of commands to help us easily ping"
-                                     + " a subset of people in this discord. "
-                                     + "to allows people to opt in/out whenever they like you can only add/remove yourself from groups\n"
-                                     + "the format is: !group subcommand groupName.\n"
-                                     + "list of subcommands are: new (creates a new group), add, remove,"
-                                     + " ping, and list.");
-                                  
-      }
-      
-      else if (command === "list") {
-        if (groupName in groups) {
-          var currentGroup = groups[groupName];
-          var groupUsernames = currentGroup["usernames"];
-          var listMsg = groupName + ": ";
-
-          for (i = 0; i < groupUsernames.length; i++) {
-            listMsg += groupUsernames[i] + " ";
-          }
-          message.channel.sendMessage(listMsg);
-        }
-
-        else {
-          message.channel.sendMessage("this group doesn't exist, maybe there was a typo.");
-        }
-      }
-
-      // message in case they type the wrong sub command
       else {
-        message.channel.sendMessage("that subcommand doesn't exist, see !group help");
+        message.channel.sendMessage("Check the spelling of the sub-command");
       }
     }
 });

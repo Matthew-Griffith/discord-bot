@@ -3,8 +3,9 @@
 
     todo: test: add, new, remove, help, ping, list
 */
+const fs = require("fs");
 
-function newEntry(entry, obj, fileName) {
+exports.newEntry = function(entry, obj, fileName) {
     /* entry (str): the name of the group 
        obj (object): the object data structure that the entry is in
        fileName (str): is where the obj gets pulled from when the bot is restarted
@@ -13,13 +14,14 @@ function newEntry(entry, obj, fileName) {
        the entry is add to the obj and backed up to disk. 
     */
     if (entry in obj) {
-          message.channel.sendMessage("This entry already exists, Baka!!!");
-        }
-        else {
-          obj[entry] = {userIDs : [], usernames : []};
-          message.channel.sendMessage(entry + " was created");
-          fs.writeFileSync(fileName, JSON.stringify(obj), 'utf-8');
-        }
+        return "This entry already exists, Baka!!!";
+    }
+
+    else {
+        obj[entry] = {userIDs : [], usernames : []};
+        fs.writeFileSync(fileName, JSON.stringify(obj), 'utf-8');          
+        return (entry + " was created");
+    }
 }
 
 function addMember(entry, userName, userID, obj, fileName) {
@@ -37,9 +39,11 @@ function addMember(entry, userName, userID, obj, fileName) {
           var currentGroup = obj[entry];
           var groupUsernames = currentGroup["usernames"];
           var groupIDs = currentGroup["userIDs"];
+
           if (groupUsernames.indexOf(userName) > -1) {
-            message.channel.sendMessage("you are already in this group");
+            return "you are already in this group";
           }
+
           else {
             groupUsernames.push(userName);
             groupIDs.push(userID);
@@ -47,11 +51,11 @@ function addMember(entry, userName, userID, obj, fileName) {
             currentGroup["usernames"] = groupUsernames;
             obj[entry] = currentGroup;            
             fs.writeFileSync(fileName, JSON.stringify(obj), 'utf-8');  
-            message.channel.sendMessage("you were added to " + entry);                      
+            return ("you were added to " + entry);                      
           }
         }
         else {
-          message.channel.sendMessage("this group doesn't exist yet, maybe you should start it");
+          return "this group doesn't exist yet, maybe you should start it";
         }
 }
 
@@ -79,16 +83,16 @@ function removeMember(entry, userName, userID, obj, fileName) {
             currentGroup["usernames"] = groupUsernames;
             obj[entry] = currentGroup;            
             fs.writeFileSync(fileName, JSON.stringify(obj), 'utf-8'); 
-            message.channel.sendMessage("you were removed from " + entry);          
+            return ("you were removed from " + entry);          
         }
 
         else {
-            message.channel.sendMessage("you are not in this group");
+            return "you are not in this group";
         }
     }
 
     else {
-        message.channel.sendMessage("check the spelling on the group name, because that group doesn't exist.");            
+        return "check the spelling on the group name, because that group doesn't exist.";            
     }
 }
 
@@ -109,10 +113,10 @@ function ping(entry, obj) {
             pingMsg += "<@" + groupIDs[i] + "> ";
         }
 
-        message.channel.sendMessage(pingMsg);
+        return pingMsg;
         }
     else {
-        message.channel.sendMessage("this group doesn't exist, maybe there was a typo.");
+        return "this group doesn't exist, maybe there was a typo.";
     }
 }
 
@@ -133,21 +137,21 @@ function listMembers(entry, obj) {
             listMsg += groupUsernames[i] + " ";
         }
 
-        message.channel.sendMessage(listMsg);
+        return listMsg;
     }
 
     else {
-        message.channel.sendMessage("this group doesn't exist, maybe there was a typo.");
+        return "this group doesn't exist, maybe there was a typo.";
     }
 }
 
 function groupHelp() {
     // tells user how the group commands is structured and the sub commands.
 
-    message.channel.sendMessage("the group commands are a set of commands to help us easily ping"
+    return "the group commands are a set of commands to help us easily ping"
                                      + " a subset of people in this discord. "
                                      + "to allows people to opt in/out whenever they like you can only add/remove yourself from groups\n"
                                      + "the format is: !group subcommand groupName.\n"
                                      + "list of subcommands are: new (creates a new group), add, remove,"
-                                     + " ping, and list.");
+                                     + " ping, and list.";
 }
