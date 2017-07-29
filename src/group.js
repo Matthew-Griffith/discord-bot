@@ -18,13 +18,13 @@ exports.newEntry = function(entry, obj, fileName) {
     }
 
     else {
-        obj[entry] = {userIDs : [], usernames : []};
+        obj[entry] = {"userIDs" : [], "usernames" : []};
         fs.writeFileSync(fileName, JSON.stringify(obj), 'utf-8');          
         return (entry + " was created");
     }
 }
 
-function addMember(entry, userName, userID, obj, fileName) {
+exports.addMember = function(entry, userName, userID, obj, fileName) {
     /* entry (str): the name of the group 
        userID (str): a unique string of number from discord need to ping users
        userName (str): the users name which will be used for the list sub-command 
@@ -47,6 +47,7 @@ function addMember(entry, userName, userID, obj, fileName) {
           else {
             groupUsernames.push(userName);
             groupIDs.push(userID);
+            console.log(groupIDs, groupUsernames);
             currentGroup["userIDs"] = groupIDs;
             currentGroup["usernames"] = groupUsernames;
             obj[entry] = currentGroup;            
@@ -59,7 +60,7 @@ function addMember(entry, userName, userID, obj, fileName) {
         }
 }
 
-function removeMember(entry, userName, userID, obj, fileName) {
+exports.removeMember = function(entry, userName, userID, obj, fileName) {
     /* entry (str): the name of the group 
        userID (str): a unique string of number from discord need to ping users
        userName (str): the users name which will be used for the list sub-command 
@@ -79,6 +80,7 @@ function removeMember(entry, userName, userID, obj, fileName) {
         if (groupUsernames.indexOf(userName) > -1) {
             groupUsernames.splice(groupUsernames.indexOf(userName), 1);
             groupIDs.splice(groupIDs.indexOf(userID), 1);
+            console.log(groupIDs, groupUsernames);            
             currentGroup["userIDs"] = groupIDs;
             currentGroup["usernames"] = groupUsernames;
             obj[entry] = currentGroup;            
@@ -96,7 +98,7 @@ function removeMember(entry, userName, userID, obj, fileName) {
     }
 }
 
-function ping(entry, obj) {
+exports.ping = function(entry, obj) {
     /*
         entry (str): the name of the group 
         obj (object): the object data structure that the entry is in
@@ -120,7 +122,7 @@ function ping(entry, obj) {
     }
 }
 
-function listMembers(entry, obj) {
+exports.listMembers = function(entry, obj) {
     /*
         entry (str): the name of the group 
         obj (object): the object data structure that the entry is in
@@ -145,7 +147,7 @@ function listMembers(entry, obj) {
     }
 }
 
-function groupHelp() {
+exports.groupHelp = function() {
     // tells user how the group commands is structured and the sub commands.
 
     return "the group commands are a set of commands to help us easily ping"
