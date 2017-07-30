@@ -122,19 +122,9 @@ bot.on("message", (message) => {
       });
     }
 
-    /*
-      this is a command to "roll" dice. it pretty straigth forward will use getRandomInt
-      function the created in the begin of this file.
-
-      TODO:
-    */
+    // this is for the roll commands, see roll.js for the implementation
     if (message.content.indexOf(prefix + "roll") >= 0) {
-      
-      subCommand = msg[1]; 
-
-      if (subCommand === "coin") {
-
-      }
+      message.channel.sendMessage(roll.command(message.content));
     }
 
     // this is the logic for the commands

@@ -4,6 +4,8 @@
   TODO: generalize the dice rolls and add the coin
 */
 
+prefix = "!";
+
 function getRandomInt(min, max) {
   /*
     min (int): smallest number can be    
@@ -25,14 +27,36 @@ function coin() {
   else {return "It is... Heads"}
 }
 
-function rollDice(numDice, numSides) {
+function rollDice(subCommand) {
   /*
-    numDice (int): the number of dice the user wants to roll
-    numSides (int): number of sides of the die
+    subCommand (str) : the users Subcommand
   */
-  result = 0; 
 
-  for (i = 0; i < numDice; i++ ) {
+  // here we will use these variables to keep track while we loop through the 
+  // user's command.
+  dice = true;
+  numDice = 0;
+  numSides = 0;
+
+  for (i = 0; i < subCommand.length; i++) {
+    if (typeof Number(subCommand[i]) === "number") {
+      if (dice === true) {
+        numDice += Number(subCommand[i]);
+      }
+      else {
+        numSides += Number(subCommand[i]);
+      }
+    }      
+    else if (subCommand[i] === 'd') {
+      dice = false;
+    }
+    else {return "check your sub-command";}  
+  }
+  
+  // here we take the results of the previous loop and add the result for the number
+  // of dice and given the number of sides.
+  result = 0;
+  for (i = 0; i < numDice; i++) {
     result += getRandomInt(1, numSides);
   }
 
@@ -40,20 +64,29 @@ function rollDice(numDice, numSides) {
 }
 
 function help() {
+  // just tells the user the structure of the command
   return ("this command lets you either roll a user provide number of dice and sides\n"
           + "structure: !roll <number of dice>d<number of sides>");
 }
 
-exports.command = function(msg, numDice, numSides) {
-  msg = message.content.toLowerCase();
-  msg = msg.slice(message.content.indexOf(prefix + "roll"), msg.length);
+exports.command = function(msg) {
+  /*
+    msg(str) : a str of the user's actually message
+
+    this is the function that will be exported to the main file. 
+  */
+  // here we just need to get the subCommand that can be in an arbitary point in the
+  // msg but must be after !roll
+  msg = msg.toLowerCase();
+  msg = msg.slice(msg.indexOf(prefix + "roll"), msg.length);
   msg = msg.split(" ");
-  input = msg[1]; 
-  if (input)
+  subCommand = msg[1]; 
+  
+  // now we just check which is the correct case, note that rolDice will return a 
+  // helpful str if there is a syntax error and that is why it is the default case.
   switch (subCommand) {
     case "coin" : return coin();
-    case "dice" : return rollDice(numDice, numSides); 
     case "help" : return help();
-    default : return "Check the spelling of the sub-command";
+    default : return rollDice(subCommand);
   }
 }
