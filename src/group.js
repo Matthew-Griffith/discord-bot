@@ -167,6 +167,6 @@ exports.command = function(entry, obj, fileName, userName, userID, command) {
         case "ping" : return ping(entry, obj);
         case "list" : return listMembers(entry, obj);
         case "help" : return groupHelp();
-        default : return "Check the spelling of the sub-command"
+        default : return "Check the spelling of the sub-command";
     }
 }

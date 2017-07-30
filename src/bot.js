@@ -5,8 +5,10 @@ const moment = require("moment-timezone");
 const ddg = require("ddg");
 const YouTube = require('youtube-node');
 
-const groups = JSON.parse(fs.readFileSync("groups.json", "utf8"));
 const groupCommand = require('./group.js');
+const roll = require('./roll.js');
+
+const groups = JSON.parse(fs.readFileSync("groups.json", "utf8"));
 const config = require("../config/config.json");
 
 const youtube = new YouTube();
@@ -126,30 +128,15 @@ bot.on("message", (message) => {
 
       TODO:
     */
-    if (message.content.startsWith(prefix + "roll")) {
-      var user_input = message.content.split(' ');
-      var dice = {
-        "d4" : "You rolled... " + getRandomInt(1,4),
-        "d6" : "You rolled... " + getRandomInt(1,6),
-        "2d6" : "You rolled..." + (getRandomInt(1,6) + getRandomInt(1,6)),
-        "d8" : "You rolled... " + getRandomInt(1,8),
-        "d10" : "You rolled... " + getRandomInt(1, 10),
-        "d12" : "You rolled... " + getRandomInt(1,12),
-        "d20" : "You rolled... " + getRandomInt(1,20)
+    if (message.content.indexOf(prefix + "roll") >= 0) {
+      msg = message.content.toLowerCase();
+      msg = msg.slice(message.content.indexOf(prefix + "roll"), msg.length);
+      msg = msg.split(" ");
+      subCommand = msg[1]; 
+
+      if (subCommand === "coin") {
+
       }
-      if (user_input.length === 1) {
-        message.channel.sendMessage('Make sure you use a space');
-      }
-      else if (user_input[1].toLowerCase() === 'coin') {
-        if (getRandomInt(0, 1) === 1) {
-          message.channel.sendMessage('It is... Tails');
-        }
-        else {message.channel.sendMessage('It is... Heads');}
-      }
-      else if (dice[user_input[1]]) {
-        message.channel.sendMessage(dice[user_input[1]]);
-      }
-      else {message.channel.sendMessage("I cannot roll that!!!");}
     }
 
     // this is the logic for the commands
@@ -159,9 +146,9 @@ bot.on("message", (message) => {
     }
 
     // below is the logic the groups feature.
-    if (message.content.indexOf("!group") >= 0) {
+    if (message.content.indexOf(prefix + "group") >= 0) {
       msg = message.content.toLowerCase();
-      msg = msg.slice(message.content.indexOf("!group"), message.content.length);
+      msg = msg.slice(message.content.indexOf(prefix + "group"), message.content.length);
       msg = msg.split(" ");
       filename = './groups.json' ;
       command = msg[1];
