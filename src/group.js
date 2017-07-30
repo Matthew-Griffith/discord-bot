@@ -1,7 +1,7 @@
 /* here will be the set of functions that define the obj
     command and sub-commands. 
 
-    todo: test: add, new, remove, help, ping, list
+    todo: 
 */
 const fs = require("fs");
 
