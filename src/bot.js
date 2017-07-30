@@ -169,22 +169,7 @@ bot.on("message", (message) => {
       authorID = message.author.id.toString();
       username = message.author.username;
 
-      const commandObj = {
-        "new" : groupCommand.newEntry(groupName, groups, filename),
-        "add" : groupCommand.addMember(groupName, username, authorID, groups, filename),
-        "remove" : groupCommand.removeMember(groupName, username, authorID, groups, filename), 
-        "ping" : groupCommand.ping(groupName, groups), 
-        "list" : groupCommand.listMembers(groupName, groups), 
-        "help" : groupCommand.groupHelp()
-      };
-
-      if (commandObj[command]) {
-        message.channel.sendMessage(commandObj[command]);
-      }
-
-      else {
-        message.channel.sendMessage("Check the spelling of the sub-command");
-      }
+      message.channel.sendMessage(groupCommand.command(groupName, groups, filename, username, authorID, command));
     }
 });
 

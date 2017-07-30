@@ -5,7 +5,7 @@
 */
 const fs = require("fs");
 
-exports.newEntry = function(entry, obj, fileName) {
+function newEntry(entry, obj, fileName) {
     /* entry (str): the name of the group 
        obj (object): the object data structure that the entry is in
        fileName (str): is where the obj gets pulled from when the bot is restarted
@@ -24,7 +24,7 @@ exports.newEntry = function(entry, obj, fileName) {
     }
 }
 
-exports.addMember = function(entry, userName, userID, obj, fileName) {
+function addMember(entry, userName, userID, obj, fileName) {
     /* entry (str): the name of the group 
        userID (str): a unique string of number from discord need to ping users
        userName (str): the users name which will be used for the list sub-command 
@@ -47,7 +47,6 @@ exports.addMember = function(entry, userName, userID, obj, fileName) {
           else {
             groupUsernames.push(userName);
             groupIDs.push(userID);
-            console.log(groupIDs, groupUsernames);
             currentGroup["userIDs"] = groupIDs;
             currentGroup["usernames"] = groupUsernames;
             obj[entry] = currentGroup;            
@@ -60,7 +59,7 @@ exports.addMember = function(entry, userName, userID, obj, fileName) {
         }
 }
 
-exports.removeMember = function(entry, userName, userID, obj, fileName) {
+function removeMember(entry, userName, userID, obj, fileName) {
     /* entry (str): the name of the group 
        userID (str): a unique string of number from discord need to ping users
        userName (str): the users name which will be used for the list sub-command 
@@ -80,7 +79,6 @@ exports.removeMember = function(entry, userName, userID, obj, fileName) {
         if (groupUsernames.indexOf(userName) > -1) {
             groupUsernames.splice(groupUsernames.indexOf(userName), 1);
             groupIDs.splice(groupIDs.indexOf(userID), 1);
-            console.log(groupIDs, groupUsernames);            
             currentGroup["userIDs"] = groupIDs;
             currentGroup["usernames"] = groupUsernames;
             obj[entry] = currentGroup;            
@@ -98,7 +96,7 @@ exports.removeMember = function(entry, userName, userID, obj, fileName) {
     }
 }
 
-exports.ping = function(entry, obj) {
+function ping(entry, obj) {
     /*
         entry (str): the name of the group 
         obj (object): the object data structure that the entry is in
@@ -122,7 +120,7 @@ exports.ping = function(entry, obj) {
     }
 }
 
-exports.listMembers = function(entry, obj) {
+function listMembers(entry, obj) {
     /*
         entry (str): the name of the group 
         obj (object): the object data structure that the entry is in
@@ -147,13 +145,28 @@ exports.listMembers = function(entry, obj) {
     }
 }
 
-exports.groupHelp = function() {
+function groupHelp() {
     // tells user how the group commands is structured and the sub commands.
 
     return "the group commands are a set of commands to help us easily ping"
-                                     + " a subset of people in this discord. "
-                                     + "to allows people to opt in/out whenever they like you can only add/remove yourself from groups\n"
-                                     + "the format is: !group subcommand groupName.\n"
-                                     + "list of subcommands are: new (creates a new group), add, remove,"
-                                     + " ping, and list.";
+            + " a subset of people in this discord. "
+            + "to allows people to opt in/out whenever they like you can only add/remove yourself from groups\n"
+            + "the format is: !group subcommand groupName.\n"
+            + "list of subcommands are: new (creates a new group), add, remove,"
+            + " ping, and list.";
+}
+
+exports.command = function(entry, obj, fileName, userName, userID, command) {
+    /*
+        this is the command that will actually be exported to the main bot file.
+    */
+    switch (command) {
+        case "new" : return newEntry(entry, obj, fileName);
+        case "add" : return addMember(entry, userName, userID, obj, fileName);
+        case "remove" : return removeMember(entry, userName, userID, obj, fileName);
+        case "ping" : return ping(entry, obj);
+        case "list" : return listMembers(entry, obj);
+        case "help" : return groupHelp();
+        default : return "Check the spelling of the sub-command"
+    }
 }
