@@ -129,9 +129,7 @@ bot.on("message", (message) => {
       TODO:
     */
     if (message.content.indexOf(prefix + "roll") >= 0) {
-      msg = message.content.toLowerCase();
-      msg = msg.slice(message.content.indexOf(prefix + "roll"), msg.length);
-      msg = msg.split(" ");
+      
       subCommand = msg[1]; 
 
       if (subCommand === "coin") {
