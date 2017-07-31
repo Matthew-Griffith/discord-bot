@@ -1,12 +1,12 @@
 // the libraries the bot uses for is commands and to connect to discord.
 const fs = require("fs");
 const Discord = require("discord.js");
-const ddg = require("ddg");
 const YouTube = require('youtube-node');
 
 // here are the files that contain the logic for their respective commands
 const groupCommand = require('./group.js');
 const roll = require('./roll.js');
+const answer = require('./answer.js');
 // here we import the json file that the bot need when it restarts
 const groups = JSON.parse(fs.readFileSync("groups.json", "utf8"));
 const config = require("../config/config.json");
@@ -50,16 +50,7 @@ bot.on("message", (message) => {
             overwatch as a query is an example of this.
     */
     if (message.content.startsWith(prefix + "answer")) {
-      var user_search = message.content.slice(8, message.content.length);
-      ddg.query(user_search, function(err, data){
-        if (data.Abstract === '') {
-          message.channel.sendMessage("I don't know... #blameMatt");
-        }
-        else if (err) {
-          message.channel.sendMessage("oh god, there was an error.");
-        }
-        else {message.channel.sendMessage(data.Abstract);}
-      });
+      message.channel.sendMessage(answer.command(message.content));
     }
 
     /*
