@@ -40,7 +40,7 @@ function rollDice(subCommand) {
 
   for (i = 0; i < subCommand.length; i++) {
     if (typeof Number(subCommand[i]) === "number") {
-      if (dice === true) {
+      if (dice) {
         numDice += Number(subCommand[i]);
       }
       else {
@@ -56,7 +56,8 @@ function rollDice(subCommand) {
   // here we take the results of the previous loop and add the result for the number
   // of dice and given the number of sides.
   result = 0;
-  for (i = 0; i < numDice; i++) {
+  for (j = 0; j < numDice; j++) {
+    console.log(result)
     result += getRandomInt(1, numSides);
   }
 
