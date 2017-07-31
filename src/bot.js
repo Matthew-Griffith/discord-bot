@@ -1,26 +1,20 @@
 // the libraries the bot uses for is commands and to connect to discord.
 const fs = require("fs");
 const Discord = require("discord.js");
-const moment = require("moment-timezone");
 const ddg = require("ddg");
 const YouTube = require('youtube-node');
 
+// here are the files that contain the logic for their respective commands
 const groupCommand = require('./group.js');
 const roll = require('./roll.js');
-
+// here we import the json file that the bot need when it restarts
 const groups = JSON.parse(fs.readFileSync("groups.json", "utf8"));
 const config = require("../config/config.json");
 
 const youtube = new YouTube();
 youtube.setKey(config.youtubeKey);
+// starts a new instance for the discord library
 const bot = new Discord.Client();
-
-// function for a random int made for the !roll command
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-}
 
 bot.on("message", (message) => {
     // this is the prefix at the start of all the commands
@@ -42,41 +36,11 @@ bot.on("message", (message) => {
         "!geneticfreak": "https://www.youtube.com/watch?v=WFoC3TR5rzI"
     }
 
-    var timezone_data = {
-      "!time new york": "America/New_York",
-      "!time chicago": "America/Chicago",
-      "!time denver": "America/Denver",
-      "!time los angeles": "America/Los_Angeles",
-      "!time london": "Europe/London",
-      "!time paris": "Europe/Paris",
-      "!time bucharest": "Europe/Buccharest",
-      "!time moscow": "Europe/Moscow",
-      "!time dubai": "Asia/Dubai",
-      "!time beijing": "Asia/Beijing",
-      "!time seoul": "Asia/Seoul",
-      "!time tokyo": "Asia/Tokyo"
-    }
-
     // checks if the message starts with a prefix, if it doesn't it stop or returns
     // if(!message.content.startsWith(prefix)) return;
 
     // this stop this bot from responsing to other bots, which could be an issue.
     if(message.author.bot) return;
-
-    /*
-      below is the implementation for the time zone command.
-
-      TODO: try to generize this so that the users can just in most major cities without
-            have to actually write all of them in the object above.
-    */
-    if(message.content.startsWith(prefix + "time")) {
-      if(timezone_data[message.content.toLowerCase()]) {
-        message.channel.sendMessage(moment.tz(timezone_data[message.content.toLowerCase()]).format('MM-DD HH:mm'));
-      }
-      else {
-        message.channel.sendMessage('Please check for typos in your query, and make sure the city is in the !cities list.')
-      }
-    }
 
     /*
       below is the answer command implementation it searchs duck duck go and try to
