@@ -30,35 +30,38 @@ function coin() {
 function rollDice(subCommand) {
   /*
     subCommand (str) : the users Subcommand
+
+    here we have a bunch of conditionals to see if the subcommand has the 
+    correct format (see help) and if it does it will roll the dice
+    otherwise it will tell the user to check the sub command
   */
 
-  // here we will use these variables to keep track while we loop through the 
-  // user's command.
-  dice = true;
-  numDice = 0;
-  numSides = 0;
+  // here we find the position of the d and then split the command into an 
+  // array with the number of the form [numDice, numSides]
+ if (subCommand.indexOf('d') > -1) {
+    subCommandArray = subCommand.split('d');
 
-  for (i = 0; i < subCommand.length; i++) {
-    if (typeof Number(subCommand[i]) === "number") {
-      if (dice) {
-        numDice += Number(subCommand[i]);
-      }
-      else {
-        numSides += Number(subCommand[i]);
-      }
-    }      
-    else if (subCommand[i] === 'd') {
-      dice = false;
+    if (subCommandArray.length === 2) {
+      numDice = Number(subCommandArray[0]);
+      numSides = Number(subCommandArray[1]); 
     }
-    else {return "check your sub-command";}  
+    else {return "check your sub-command";}
   }
-  
-  // here we take the results of the previous loop and add the result for the number
-  // of dice and given the number of sides.
+  else {return "check your sub-command";}
+
+  // results start at zero and they is increased will each die roll later
   result = 0;
-  for (j = 0; j < numDice; j++) {
-    console.log(result)
-    result += getRandomInt(1, numSides);
+
+  // first we have an or statement to make sure numDice and numSide didn't 
+  // become NaN when we converted them above
+  if (isNaN(numDice) || isNaN(numSides)){
+   return "check your sub-command";
+  }
+
+  else {
+    for (i = 0; i < numDice; i++) {
+      result += getRandomInt(1, numSides);
+    }
   }
 
   return result;
