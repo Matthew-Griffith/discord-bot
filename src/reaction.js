@@ -40,8 +40,15 @@ exports.command = function(msg, obj) {
   if (obj[subCommand]) {
     return obj[subCommand];
   }
-  else if (subCommand === "new") {
+  else if (subCommand === "new" && name && link) {
     return newEntry(name, link, obj, fileName)
+  }
+  else if (subCommand === "help") {
+    return ("the react command has two functions, bring up a saved video or image "
+            + "or to save a image or video for later.\n"
+            + "they have the form:\n"
+            + "!react <save name for a link>\n"
+            + "!react new <name> <link>");
   }
   else {return "check the spell for your command"; }
 }
