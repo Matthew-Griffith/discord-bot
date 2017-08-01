@@ -34,8 +34,8 @@ exports.command = function(msg, obj) {
   msg = msg.slice(msg.indexOf(prefix + "react"), msg.length);
   msg = msg.split(" ");
   fileName = './reaction.json';
-  subCommand = msg[1].toLowerCase();  // this made lowercase to help the users
-  name = msg[2].toLowerCase();        // this made lowercase to help the users
+  subCommand = msg[1];   // this made lowercase to help the users
+  name = msg[2];       // this made lowercase to help the users
   link = msg[3];
 
   // now we begin by checking if the sub command is in the obj
@@ -46,10 +46,13 @@ exports.command = function(msg, obj) {
   else if (subCommand === "new" && name && link) {
     // if a user wrote a reaction call new from that point on this conditional
     // would never be run
-    if (name === "new") {
-      return "new can't be used as a name for an entry";
+    if (name === "new" || name === "help") {
+      return "new or help can't be used as a name for an entry";
     }
-    else {return newEntry(name, link, obj, fileName);}
+    else {
+      subCommand = msg[1].toLowerCase();    // this made lowercase to help the users      
+      name = msg[2].toLowerCase();          // this made lowercase to help the users      
+      return newEntry(name, link, obj, fileName);}
   }
   else if (subCommand === "help") {
     return ("the react command has two functions, bring up a saved video or image "
