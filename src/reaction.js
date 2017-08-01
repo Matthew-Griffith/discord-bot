@@ -33,7 +33,7 @@ function reactList(obj) {
   keyArr = Object.keys(obj);
   msg = 'current reactions: ';
   for (i = 0; i < keyArr.length; i++) {
-    msg += keyArr[i] + " ";
+    msg += keyArr[i] + "\n ";
   }
   return msg;
 }
