@@ -56,7 +56,7 @@ exports.command = function(msg, obj) {
     // if a user wrote a reaction call new from that point on this conditional
     // would never be run
     if (name === "new" || name === "help" || name === "list") {
-      return "new, help, list can't be used as a name for an entry";
+      return "new, help, and list can't be used as a name for an entry";
     }
     else {
       subCommand = msg[1].toLowerCase();    // this made lowercase to help the users      
