@@ -34,14 +34,17 @@ exports.command = function(msg, obj) {
   msg = msg.split(" ");
   fileName = './reaction.json';
   subCommand = msg[1].toLowerCase();
-  name = msg[2];
+  name = msg[2].toLowerCase();
   link = msg[3];
 
   if (obj[subCommand]) {
     return obj[subCommand];
   }
   else if (subCommand === "new" && name && link) {
-    return newEntry(name, link, obj, fileName)
+    if (name === "new") {
+      return "new can't be used as a name for an entry";
+    }
+    else {return newEntry(name, link, obj, fileName);}
   }
   else if (subCommand === "help") {
     return ("the react command has two functions, bring up a saved video or image "
