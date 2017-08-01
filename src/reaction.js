@@ -30,17 +30,22 @@ function newEntry(name, link, obj, fileName) {
 }
 
 exports.command = function(msg, obj) {
+  // here we edit the msg that is a string to a easier form
   msg = msg.slice(msg.indexOf(prefix + "react"), msg.length);
   msg = msg.split(" ");
   fileName = './reaction.json';
-  subCommand = msg[1].toLowerCase();
-  name = msg[2].toLowerCase();
+  subCommand = msg[1].toLowerCase();  // this made lowercase to help the users
+  name = msg[2].toLowerCase();        // this made lowercase to help the users
   link = msg[3];
 
+  // now we begin by checking if the sub command is in the obj
   if (obj[subCommand]) {
     return obj[subCommand];
   }
+  // if they call new we also need to make sure there is a link and name
   else if (subCommand === "new" && name && link) {
+    // if a user wrote a reaction call new from that point on this conditional
+    // would never be run
     if (name === "new") {
       return "new can't be used as a name for an entry";
     }
