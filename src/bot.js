@@ -7,8 +7,11 @@ const ddg = require("ddg");
 // here are the files that contain the logic for their respective commands
 const groupCommand = require('./group.js');
 const roll = require('./roll.js');
+const react = require('./reaction.js');
 // here we import the json file that the bot need when it restarts
-const groups = JSON.parse(fs.readFileSync("groups.json", "utf8"));
+var groups = JSON.parse(fs.readFileSync("groups.json", "utf8"));
+var reactionObj = JSON.parse(fs.readFileSync("reaction.json", "utf8"));
+// here we load the reaction obj into memory
 const config = require("../config/config.json");
 
 const youtube = new YouTube();
@@ -19,25 +22,6 @@ const bot = new Discord.Client();
 bot.on("message", (message) => {
     // this is the prefix at the start of all the commands
     let prefix = "!";
-    // this an object that will content the commands and responses
-    var responseObject = {
-        "!calm": "http://i.imgur.com/GwVuz57.gif",
-        "!anime": "http://i.imgur.com/JZKo0sf.gifv",
-        "!laughing": "http://i.imgur.com/q2SwDMJ.gif",
-        "!shitposting": "http://i.imgur.com/y0pc24c.png",
-        "!itsokay": "http://i.imgur.com/558JUew.jpg",
-        "!what": "http://i.imgur.com/2VJLpxj.jpg",
-        "!embarrassed": "http://i.imgur.com/JeLyivH.gif",
-        "!love": "http://i.imgur.com/8ZsL61S.gif",
-        "!fire": "http://i.imgur.com/6XcSabd.png",
-        "!mmm": "http://i.imgur.com/Ubjkvpd.gif",
-        "!help": "list of commands:\n!laughing\n!shitposting\n!calm\n!anime\n!itsokay\n!what\n!embarrassed\n!love\n!fire\n!mmm\n!time: this command will give the time and data of a list of cities see !cities\n!geneticfreak\n!answer takes a user input and tries to tell you about it, for all the time you have thought what the fuck is he talking about.\n!yt: input a search and returns the top youtube result.\n!roll: I can flip coins, roll: d4, d6, d8, d10, d12 and d20",
-        "!cities": "List of cities:\nnew york\nchicago\ndenver\nlos angeles\nlondon\nparis\nbucharest\nmoscow\ndubai\nbeijing\nseoul\ntokyo",
-        "!geneticfreak": "https://www.youtube.com/watch?v=WFoC3TR5rzI"
-    }
-
-    // checks if the message starts with a prefix, if it doesn't it stop or returns
-    // if(!message.content.startsWith(prefix)) return;
 
     // this stop this bot from responsing to other bots, which could be an issue.
     if(message.author.bot) return;
@@ -92,10 +76,9 @@ bot.on("message", (message) => {
       message.channel.sendMessage(roll.command(message.content));
     }
 
-    // this is the logic for the commands
-    msgArray = message.content.split(' ');
-    if(responseObject[msgArray[0]]) {
-        message.channel.sendMessage(responseObject[msgArray[0]]);
+    // this is from the react command
+    if(message.content.indexOf(prefix + "react") > -1) {
+      message.channel.sendMessage(react.command(message.content, reactionObj));
     }
 
     // below is the logic the groups feature.
