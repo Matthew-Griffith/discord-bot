@@ -64,7 +64,7 @@ function rollDice(subCommand) {
     }
   }
 
-  return result;
+  return ("You rolled... " + result);
 }
 
 function help() {
