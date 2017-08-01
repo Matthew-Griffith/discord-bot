@@ -29,13 +29,22 @@ function newEntry(name, link, obj, fileName) {
   }
 }
 
+function reactList(obj) {
+  keyArr = Object.keys(obj);
+  msg = 'current reactions: ';
+  for (i = 0; i < keyArr.length; i++) {
+    msg += keyArr[i] + " ";
+  }
+  return msg;
+}
+
 exports.command = function(msg, obj) {
   // here we edit the msg that is a string to a easier form
   msg = msg.slice(msg.indexOf(prefix + "react"), msg.length);
   msg = msg.split(" ");
   fileName = './reaction.json';
-  subCommand = msg[1];   // this made lowercase to help the users
-  name = msg[2];       // this made lowercase to help the users
+  subCommand = msg[1];   
+  name = msg[2];       
   link = msg[3];
 
   // now we begin by checking if the sub command is in the obj
@@ -46,14 +55,17 @@ exports.command = function(msg, obj) {
   else if (subCommand === "new" && name && link) {
     // if a user wrote a reaction call new from that point on this conditional
     // would never be run
-    if (name === "new" || name === "help") {
-      return "new or help can't be used as a name for an entry";
+    if (name === "new" || name === "help" || name === "list") {
+      return "new, help, list can't be used as a name for an entry";
     }
     else {
       subCommand = msg[1].toLowerCase();    // this made lowercase to help the users      
       name = msg[2].toLowerCase();          // this made lowercase to help the users      
       return newEntry(name, link, obj, fileName);}
   }
+  else if (subCommand === "list") {
+    return reactList(obj);
+  }    
   else if (subCommand === "help") {
     return ("the react command has two functions, bring up a saved video or image "
             + "or to save a image or video for later.\n"
@@ -61,6 +73,6 @@ exports.command = function(msg, obj) {
             + "!react <save name for a link>\n"
             + "!react new <name> <link>");
   }
-  else {return "check the spell for your command"; }
+  else {return "check the spelling for your command"; }
 }
 
