@@ -30,11 +30,10 @@ function newEntry(name, link, obj, fileName) {
 }
 
 exports.command = function(msg, obj) {
-  msg = msg.toLowerCase();
   msg = msg.slice(msg.indexOf(prefix + "react"), msg.length);
   msg = msg.split(" ");
   fileName = './reaction.json';
-  subCommand = msg[1];
+  subCommand = msg[1].toLowerCase();
   name = msg[2];
   link = msg[3];
 
