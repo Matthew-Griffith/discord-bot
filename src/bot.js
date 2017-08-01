@@ -100,4 +100,4 @@ bot.on('ready', () => {
   console.log('I am ready!');
 });
 
-bot.login(config.testBot);
+bot.login(config.mainBot);
