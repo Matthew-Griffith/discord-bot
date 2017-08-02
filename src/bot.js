@@ -94,6 +94,11 @@ bot.on("message", (message) => {
 
       message.channel.sendMessage(groupCommand.command(groupName, groups, filename, username, authorID, command));
     }
+
+    // here will be a simple help statment for the bot
+    if (message.content.indexOf(prefix + "help") >= 0) {
+      message.channel.sendMessage("list of commands: \n yt \n group \n react \n answers \n roll")
+    }
 });
 
 bot.on('ready', () => {
