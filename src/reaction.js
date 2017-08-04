@@ -40,13 +40,23 @@ function reactList(obj) {
 
 exports.command = function(msg, obj) {
   // here we edit the msg that is a string to a easier form
-  msg = msg.toLowerCase();
   msg = msg.slice(msg.indexOf(prefix + "react"), msg.length);
   msg = msg.split(" ");
   fileName = './reaction.json';
   subCommand = msg[1];
   name = msg[2];
   link = msg[3];
+
+  /* here we want to help users by setting the input to lowercase, but we have
+     to be careful that we don't make the links lowercase it will cause some to
+     break; most noteable youtube. so here we set the subCommand to lowercase
+     but we have to check to see if the user typed a subCommand and then later
+     when we know the user is inputing a new entry we will set the name of that
+     entry to lowercase.
+  */
+  if (msg.length > 1) {
+    subCommand = subCommand.toLowerCase();
+  }
 
   // now we begin by checking if the sub command is in the obj
   if (obj[subCommand]) {
@@ -60,6 +70,9 @@ exports.command = function(msg, obj) {
       return "new, help, and list can't be used as a name for an entry";
     }
     else {
+      // here we know the user has input of new for a new entry and can set it
+      // to lowercase before it is saved.
+      name = name.toLowerCase();
       return newEntry(name, link, obj, fileName);}
   }
   else if (subCommand === "list") {
