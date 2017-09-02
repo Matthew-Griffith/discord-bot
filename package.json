@@ -10,11 +10,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "discord.js" : "*", 
+    "discord.js" : "*",
     "ddg" : "0.0.3",
     "youtube-node" : "*"
   },
-  
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Matthew-Griffith/discord-bot.git"
@@ -25,5 +25,5 @@
   ],
   "author": "Matthew Griffith",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/matthew-griffith/discord-bot#readme"
+  "homepage": "https://github.com/Matthew-Griffith/discord-bot/blob/master/README.md"
 }
